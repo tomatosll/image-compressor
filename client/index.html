@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小小七的图片压缩网</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21,15 16,10 5,21"/>
+                </svg>
+                <h1>小小七的图片压缩网</h1>
+            </div>
+            <p class="subtitle">快速压缩图片，保持高质量，支持批量处理</p>
+        </header>
+
+        <!-- 主要内容区 -->
+        <main class="main-content">
+            <!-- 上传区域 -->
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        <h3>拖放图片到这里</h3>
+                        <p>或点击选择文件</p>
+                        <span class="supported-formats">支持 JPG、PNG、WebP、GIF 格式，最大 50MB</span>
+                    </div>
+                    <input type="file" id="fileInput" multiple accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+                </div>
+            </section>
+
+            <!-- 设置区域 -->
+            <section class="settings-section" id="settingsSection">
+                <h2 class="section-title">压缩设置</h2>
+                <div class="settings-grid">
+                    <div class="setting-group">
+                        <label class="setting-label">压缩质量</label>
+                        <div class="quality-buttons">
+                            <button class="quality-btn" data-quality="high">
+                                <span class="quality-name">高质量</span>
+                                <span class="quality-desc">80%</span>
+                            </button>
+                            <button class="quality-btn active" data-quality="medium">
+                                <span class="quality-name">中等</span>
+                                <span class="quality-desc">60%</span>
+                            </button>
+                            <button class="quality-btn" data-quality="low">
+                                <span class="quality-name">低质量</span>
+                                <span class="quality-desc">40%</span>
+                            </button>
+                            <button class="quality-btn" data-quality="custom">
+                                <span class="quality-name">自定义</span>
+                                <span class="quality-desc">1-100%</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="setting-group custom-quality-group" id="customQualityGroup" style="display: none;">
+                        <label class="setting-label">自定义质量: <span id="qualityValue">50</span>%</label>
+                        <input type="range" id="qualitySlider" min="1" max="100" value="50" class="quality-slider">
+                        <div class="slider-labels">
+                            <span>更小体积</span>
+                            <span>更高质量</span>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <label class="setting-label">输出格式</label>
+                        <select id="formatSelect" class="format-select">
+                            <option value="original">保持原格式</option>
+                            <option value="jpeg">JPEG</option>
+                            <option value="png">PNG</option>
+                            <option value="webp">WebP</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 文件列表 -->
+            <section class="files-section" id="filesSection" style="display: none;">
+                <div class="files-header">
+                    <h2 class="section-title">已选择的文件</h2>
+                    <div class="files-actions">
+                        <button class="btn btn-secondary" id="clearAllBtn">清空全部</button>
+                        <button class="btn btn-primary" id="compressBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 20V10"/>
+                                <path d="M18 20V4"/>
+                                <path d="M6 20v-6"/>
+                            </svg>
+                            开始压缩
+                        </button>
+                    </div>
+                </div>
+                <div class="files-list" id="filesList"></div>
+            </section>
+
+            <!-- 结果区域 -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h2 class="section-title">压缩结果</h2>
+                    <div class="results-summary" id="resultsSummary"></div>
+                    <button class="btn btn-primary" id="downloadAllBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        下载全部
+                    </button>
+                </div>
+                <div class="results-list" id="resultsList"></div>
+            </section>
+        </main>
+
+        <!-- 加载遮罩 -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p>正在压缩图片...</p>
+                <span class="loading-progress" id="loadingProgress">0%</span>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>小小七的图片压缩网 - 安全、快速、免费</p>
+            <p>所有图片仅在服务器临时存储，1小时后自动删除</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
