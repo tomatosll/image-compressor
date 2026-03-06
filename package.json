@@ -1,0 +1,12 @@
+{
+  "name": "image-compressor",
+  "version": "1.0.0",
+  "description": "小小七的图片压缩网",
+  "scripts": {
+    "start": "node server/server.js",
+    "install": "cd server && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
